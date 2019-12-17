@@ -1,0 +1,23 @@
+{
+  "var": {
+    "currentLogged": ""
+  },
+  "users": {
+    "sixthaccountcsgo": {
+      "AccountName": "sixthaccountcsgo",
+      "ProfileName": "Loewe",
+      "SteamId64": "76561198822504212",
+      "BannedVac": "0",
+      "BannedGame": "1",
+      "DecValue" : "862238484"
+    },
+    "antoineditlolotte": {
+      "AccountName": "antoineditlolotte",
+      "ProfileName": "Lolotte",
+      "SteamId64": "76561198144684502",
+      "BannedVac": "1",
+      "BannedGame": "0",
+      "DecValue" : "184418774"
+    }
+  }
+}
