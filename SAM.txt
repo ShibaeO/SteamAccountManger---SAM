@@ -1,0 +1,42 @@
+sixthaccountcsgo - >
+                      - REG ActiveUser = 3364b714
+                      - Username = sixthaccountcsgo
+
+antoineditlolotte - >
+                      - REG ActiveUser = afe01d6
+                      - Username = antoineditlolotte
+
+
+Solution :
+          - Changer REG Ordinateur\HKEY_CURRENT_USER\Software\Valve\Steam\ActiveProcess -> ActiveUser avec les valeur des didfferent compte
+          - Changer REG Ordinateur\HKEY_CURRENT_USER\Software\Valve\Steam -> AutoLoginUser avec les valeur des compe (Nom du compte)
+          - Changer LoginUser.vdf -> "MostRecent"		"1" sur 1 pour le compte que l'on veut switch, et "MostRecent"		"1" sur 0 pour celui quon quite
+
+\Steam\config Pour trouver LoginUser.vdf
+
+
+
+
+Pour chaque utlisateur cree un fichier ou sur chaque ligne est renseigner l'info souhaiter :
+
+user1.txt :
+            sixthaccountcsgo
+            ffff5555
+user2.text :
+            antoineditlolotte
+            gggg8888
+
+            ou
+user1.txt :
+            accountName:sixthaccountcsgo
+            regHex:ffff5555
+user2.text :                                          -> avec split()
+            accountName:antoineditlolotte
+            regHex:gggg8888
+
+
+mais necessite un fichier config.txt -> avec le accountName ou regHex acctuelement connecter sue la premier ligne
+add new account -> renseigner "AccountName" -> cree accountName.txt -> y inscrire le accountName sur la bonne ligne -> modifier registre avec accountName -> lancer steam -> entre mot de passe et cliquer sur RememberPassword -> recuperer regHex -> l'incrire sur la bonne ligne
+
+
+Peut etre utilisez les fichier .ini (configParser) qui persmet d'ADD des section ansi que des chose dans la section
