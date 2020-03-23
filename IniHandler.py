@@ -20,5 +20,6 @@ def addIniAccount(file, section, accountName, accountValue, Hex, hexValue):
         p.write(configIni)
         configIni.truncate()
 
-addIniAccount("config.ini", "juelie", "accountName", "julie", "hexValue", "Hs2dq6")
-accountIniRemove("config.ini", "juelie")
+
+#addIniAccount("config.ini", "juelie", "accountName", "julie", "hexValue", "Hs2dq6")
+#accountIniRemove("config.ini", "juelie")
