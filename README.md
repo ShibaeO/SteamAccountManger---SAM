@@ -1,7 +1,7 @@
 # Steam Account Manager
 
 Logiciel développer en Python3, permettant de changer de compte rapidement sans rentrer le code Steam guard,
-ce-ci est possible grâce au **`ConnectCache token`**, en effet en cochant **Remember my password** lors de la connexion au compte, il suffit de récupérer certains valeurs dans le registre Windows, et une modification dans un ficher de steam (**.VDF**). Ansi en faisant une sauvegarde simple de c'est valeur et en les modifiant cela permet une passage d'un compte a l'autre rapidement et en toute securité en effet le ***Steam Account Manager*** ne stock et récupère  aucun **Mot De Passe**
+ce-ci est possible grâce au **`ConnectCache token`**, en effet en cochant **Remember my password** lors de la connexion au compte, il suffit de récupérer certains valeurs dans le registre Windows, et une modification dans un ficher de steam (**.VDF**). Ansi en faisant une sauvegarde simple de c'est valeur et en les modifiant cela permet une passage d'un compte a l'autre rapidement et en toute securité en effet le ***Steam Account Manager*** ne stock et récupère  aucun **Mot De Passe**.
 
 ## Exemple :
 
