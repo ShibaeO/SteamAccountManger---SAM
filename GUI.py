@@ -5,13 +5,14 @@ import ShibaeoUtlisLib as stl
 import os
 import ctypes
 import webbrowser
-import subprocess
+
+#Command pour retirer le shell quand on lance l'app
 ctypes.windll.user32.ShowWindow(ctypes.windll.kernel32.GetConsoleWindow(), 0)
 
 #sections pour le parser qui recupère tout les compte pour la listBox
 
 p = configparser.ConfigParser()
-e = p.read("config.ini")
+e = p.read("usr_db.ini")
 e = p.sections()
 
 #section pour le systemTray pour un-hide la window et quiter le program
@@ -75,6 +76,9 @@ while True:
         text = sg.popup_get_text('Title', 'Please input something')
         sg.popup('Results', 'The value returned from PopupGetText', text)
     elif event == "Reload app":
+        stl.guiReload()
+    elif event == "Remove selected Account":
+        stl.accountIniRemove("usr_db.ini", stl.listToString(values['_LISTBOX_']))
         stl.guiReload()
 
 
