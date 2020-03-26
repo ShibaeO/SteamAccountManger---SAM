@@ -13,6 +13,7 @@ Solution :
           - Changer LoginUser.vdf -> "MostRecent"		"1" sur 1 pour le compte que l'on veut switch, et "MostRecent"		"1" sur 0 pour celui quon quite
 
 \Steam\config Pour trouver LoginUser.vdf
+\Steam\config\LoginUser.vdf
 
 
 
@@ -40,3 +41,13 @@ add new account -> renseigner "AccountName" -> cree accountName.txt -> y inscrir
 
 
 Peut etre utilisez les fichier .ini (configParser) qui persmet d'ADD des section ansi que des chose dans la section
+
+#addAccount():
+#    Enter le nom du compte
+#    kill Steam
+#    recuperer active user
+#    lancer steam avec le compte voulu
+#    attendre connection en regardant si reg active user a changer
+#    si reg a changer:
+#        crée section compte dans ini et recuper la reg value
+#    relaod de l'app pour actualiser la liste des compte

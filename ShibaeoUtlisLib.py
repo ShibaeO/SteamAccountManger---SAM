@@ -1,9 +1,28 @@
-# A pour but de changer deux valeurs dans le registre ("ActiveProcess") & ("AutoLoginUser)
-#dataActiveUser1 = 862238484 #sixthaccountcsgo
-#dataActiveUser2 = 184418774 #antoineditlolotte
-#dataStr1 = "antoineditlolotte"
-#dataStr2 = "sixthaccountcsgo"
-#curentLoggedAccount = "antoineditlolotte"
+def listToString(s):
+    str1 = " "
+    return (str1.join(s))
+
+def accountIniRemove(file, section):
+    import configparser
+    p = configparser.ConfigParser()
+    with open(file, "r+") as configIni:
+        p.read_file(configIni)
+        p.remove_section(section)
+        configIni.seek(0)                          #Credit to : falsetru from https://stackoverflow.com/ for giving this code wiwh help me :)
+        p.write(configIni)
+        configIni.truncate()
+
+def addIniAccount(file, section, accountName, accountValue, Hex, hexValue):
+    import configparser
+    p = configparser.ConfigParser()
+    with open(file, "r+") as configIni:
+        p.read_file(configIni)
+        p.add_section(section)
+        p.set(section, accountName, accountValue)
+        p.set(section, Hex, hexValue)
+        configIni.seek(0)
+        p.write(configIni)
+        configIni.truncate()
 
 def regModAutologin (AccountName):
     import winreg
@@ -27,4 +46,8 @@ def regQuerryCurrenLogged():
         account, index = winreg.QueryValueEx(regLastLogin, "AutoLoginUser")
         return account
 
-print(regQuerryCurrenLogged())
+def guiReload():
+        import subprocess
+        import os
+        subprocess.Popen("GUI.py 1", shell=True)
+        os._exit(0)

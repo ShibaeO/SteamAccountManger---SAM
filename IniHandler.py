@@ -1,8 +1,6 @@
-import configparser
-
-p = configparser.ConfigParser()
-
 def accountIniRemove(file, section):
+    import configparser
+    p = configparser.ConfigParser()
     with open(file, "r+") as configIni:
         p.read_file(configIni)
         p.remove_section(section)
@@ -11,6 +9,8 @@ def accountIniRemove(file, section):
         configIni.truncate()
 
 def addIniAccount(file, section, accountName, accountValue, Hex, hexValue):
+    import configparser
+    p = configparser.ConfigParser()
     with open(file, "r+") as configIni:
         p.read_file(configIni)
         p.add_section(section)
@@ -19,7 +19,3 @@ def addIniAccount(file, section, accountName, accountValue, Hex, hexValue):
         configIni.seek(0)
         p.write(configIni)
         configIni.truncate()
-
-
-#addIniAccount("config.ini", "juelie", "accountName", "julie", "hexValue", "Hs2dq6")
-#accountIniRemove("config.ini", "juelie")
