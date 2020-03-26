@@ -12,17 +12,21 @@ def accountIniRemove(file, section):
         p.write(configIni)
         configIni.truncate()
 
-def addIniAccount(file, section, accountName, accountValue, Hex, hexValue):
+def addIniAccount(file, accountId, hexValue, steamIdValue):
     import configparser
     p = configparser.ConfigParser()
     with open(file, "r+") as configIni:
         p.read_file(configIni)
-        p.add_section(section)
-        p.set(section, accountName, accountValue)
-        p.set(section, Hex, hexValue)
+        p.add_section(accountId)
+        p.set(accountId, "accountName", accountId)
+        p.set(accountId, "hexValue", hexValue)
+        p.set(accountId, "vacBanned", "False")
+        p.set(accountId, "GameBanned", "False")
+        p.set(accountId, "steamId", steamIdValue)
         configIni.seek(0)
         p.write(configIni)
         configIni.truncate()
+
 
 def regModAutologin (AccountName):
     import winreg
