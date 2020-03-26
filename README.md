@@ -11,6 +11,13 @@ ce-ci est possible grâce au **`ConnectCache token`**, en effet en cochant **Rem
 | \HKEY_CURRENT_USER\Software\Valve\Steam | AutoLoginUser = `Nom du compte` |
 |\Steam\config\LoginUser.vdf|"MostRecent" = `"1"`|
 
+## Dependencies
+
+ - `configparser==4.0.2`
+ - `winreg`
+ - `PyVDF==2.0.0`
+
+
 ## To-do :
 
  - [x] **Changer** valeur du registre & les récupérer
