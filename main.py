@@ -9,10 +9,25 @@ import ShibaeoUtlisLib as stl
 from infi.systray import SysTrayIcon
 import configparserMod as configparser
 
+
+
+#steam path check and set
+config = configparser.ConfigParser()
+config.read('config.ini')
+sp = str(config['config']['steampath'].replace(",", "").replace("'", "").replace('"',''))
+rsp = str(stl.regQuerryCurrenSteamPath()).replace(")", "").replace("(", "").replace("1", "").replace(",", "").replace("'", "").replace('"','')
+
+if rsp == sp:
+    print("#->  Steam Path is the same continue")
+else:
+    print("#->  Steam path has changed here the new one -> {} ".format(str(stl.regQuerryCurrenSteamPath())))
+    stl.setIniValueValue('config.ini', 'config', "steampath", str(stl.regQuerryCurrenSteamPath()).replace(")", "").replace("(", "").replace("1", "").replace(",", ""))
+
+
 #Command pour retirer le shell quand on lance l'app
 #ctypes.windll.user32.ShowWindow(ctypes.windll.kernel32.GetConsoleWindow(), 0)
 
-def long_operation_thread(popUpAccount):
+def mainAddAccount(popUpAccount):
     #config configparserMod recuper
     config = configparser.ConfigParser()
     config.read('config.ini')
@@ -21,7 +36,7 @@ def long_operation_thread(popUpAccount):
 
     #->   kill steam
     print("#->    Cheking steam thread status")
-    if stl.checkIfProcessRunning("Steam"):
+    if stl.checkIfProcessRunning("Steam.exe"):
         stl.killSteam()
         print("#->    kill steam")
     else:
@@ -97,7 +112,7 @@ def the_gui():
             if text == None or "":
                 print("#->  Exiting popup")
             else:
-                thread = threading.Thread(target=long_operation_thread, args=(str(text),), daemon=True)
+                thread = threading.Thread(target=mainAddAccount, args=(str(text),), daemon=True)
                 thread.start()
                 sg.SystemTray.notify('Adding :', stl.listToString(text))
         elif event == '_BUTTON_KEY_':
@@ -110,8 +125,7 @@ def the_gui():
         elif event == 'Minimize':
             window.hide()
         elif event == "Steam path":
-            text = sg.PopupGetFolder('Please enter a folder name', no_titlebar=True, grab_anywhere=True,)
-            sg.Popup('Results', 'The value returned from PopupGetFolder', text)
+            text = sg.PopupGetFolder('Please enter steam path if the actual one is different of yours', default_path=sp, no_titlebar=True, grab_anywhere=True,)
         elif event == "Reload app":
             stl.guiReload()
         elif event == "Remove selected Account":

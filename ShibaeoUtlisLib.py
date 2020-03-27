@@ -58,12 +58,12 @@ def addIniAccount(file, accountId, hexValue, steamIdValue, steamPseudo):
         p.write(configIni)
         configIni.truncate()
 
-def setIniValue(file, section, value):
+def setIniValueValue(file, section, name, value):
     import configparserMod as configparser
     p = configparser.ConfigParser()
     with open(file, "r+") as configIni:
         p.read_file(configIni)
-        p.set(section, "currentuser", value)
+        p.set(section, name, value)
         configIni.seek(0)
         p.write(configIni)
         configIni.truncate()
@@ -94,14 +94,21 @@ def regModRemPass(value):
 def regQuerryCurrenLogged():
         import winreg
         regLastLogin = winreg.OpenKeyEx(winreg.HKEY_CURRENT_USER, r"Software\\Valve\\Steam", access=winreg.KEY_ALL_ACCESS)
-        account, index = winreg.QueryValueEx(regLastLogin, "AutoLoginUser")
-        return account
+        CurrenLogged = winreg.QueryValueEx(regLastLogin, "AutoLoginUser")
+        return CurrenLogged
 
 def regQuerryCurrenUser():
         import winreg
         regLastLogin = winreg.OpenKeyEx(winreg.HKEY_CURRENT_USER, r"Software\\Valve\\Steam\\ActiveProcess", access=winreg.KEY_ALL_ACCESS)
-        account, index = winreg.QueryValueEx(regLastLogin, "ActiveUser")
-        return account
+        CurrenUser = winreg.QueryValueEx(regLastLogin, "ActiveUser")
+        return CurrenUser
+
+def regQuerryCurrenSteamPath():
+        import winreg
+        regLastLogin = winreg.OpenKeyEx(winreg.HKEY_CURRENT_USER, r"Software\\Valve\\Steam", access=winreg.KEY_ALL_ACCESS)
+        CurrenSteamPath = winreg.QueryValueEx(regLastLogin, "SteamPath")
+        return CurrenSteamPath
+
 
 
 
