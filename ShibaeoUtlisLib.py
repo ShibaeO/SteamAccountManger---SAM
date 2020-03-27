@@ -15,7 +15,7 @@ def vdfGrabSteamId(account):
     import configparserMod as configparser
     config = configparser.ConfigParser()
     config.read('config.ini')
-    steamPath = config['config']['steamPath'].replace('"', "")
+    steamPath = config['config']['steamPath'].replace('"', '').replace("'", "")
     vdf = PyVDF()
     vdf.load("{}/config/config.vdf".format(steamPath))
     usr = vdf["InstallConfigStore.Software.Valve.Steam.Accounts.{}.SteamID".format(account)]
@@ -26,7 +26,7 @@ def vdfGrabPseudo(steamId64):
         import configparserMod as configparser
         config = configparser.ConfigParser()
         config.read('config.ini')
-        steamPath = config['config']['steamPath'].replace('"', "")
+        steamPath = config['config']['steamPath'].replace('"', '').replace("'", "")
         vdf = PyVDF()
         vdf.load("{}/config/loginusers.vdf".format(steamPath))
         pseudo = vdf["users.{}.PersonaName".format(steamId64)]
@@ -72,22 +72,22 @@ def regModAutologin(AccountName):
     import winreg
     regLastLogin = winreg.OpenKeyEx(winreg.HKEY_CURRENT_USER, r"Software\\Valve\\Steam", access=winreg.KEY_ALL_ACCESS)
     winreg.SetValueEx(regLastLogin, "AutoLoginUser", 0, winreg.REG_SZ, AccountName)
-    account, index = winreg.QueryValueEx(regLastLogin, "AutoLoginUser")
+    regLastLogin = winreg.QueryValueEx(regLastLogin, "AutoLoginUser")
 
 
-def regModActiveUser(accountValue):
+def regModActiveUser(regValue):
     import winreg
-    regActiveUser = winreg.OpenKeyEx(winreg.HKEY_CURRENT_USER, r"Software\\Valve\\Steam\\ActiveProcess", access=winreg.KEY_ALL_ACCESS)
-    winreg.SetValueEx(regActiveUser, "ActiveUser", 0, winreg.REG_DWORD, accountValue)
-    decValue, idex = winreg.QueryValueEx(regActiveUser, "ActiveUser")
-    print(decValue)
+    regModActiveUser = winreg.OpenKeyEx(winreg.HKEY_CURRENT_USER, r"Software\\Valve\\Steam\\ActiveProcess", access=winreg.KEY_ALL_ACCESS)
+    winreg.SetValueEx(regModActiveUser, "ActiveUser", 0, winreg.REG_DWORD, regValue)
+    regModActiveUser = winreg.QueryValueEx(regModActiveUser, "ActiveUser")
+
 
 def regModRemPass(value):
     import winreg
-    regActiveUser = winreg.OpenKeyEx(winreg.HKEY_CURRENT_USER, r"Software\\Valve\\Steam", access=winreg.KEY_ALL_ACCESS)
-    winreg.SetValueEx(regActiveUser, "RememberPassword", 0, winreg.REG_DWORD, value)
-    decValue, idex = winreg.QueryValueEx(regActiveUser, "RememberPassword")
-    print(decValue)
+    regModRemPass = winreg.OpenKeyEx(winreg.HKEY_CURRENT_USER, r"Software\\Valve\\Steam", access=winreg.KEY_ALL_ACCESS)
+    winreg.SetValueEx(regModRemPass, "RememberPassword", 0, winreg.REG_DWORD, value)
+    regModRemPass = winreg.QueryValueEx(regModRemPass, "RememberPassword")
+
 
 
 def regQuerryCurrenLogged():

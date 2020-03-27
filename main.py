@@ -51,7 +51,7 @@ def mainAddAccount(popUpAccount):
     stl.startWithAccount(steamPath, popUpAccount)
     time.sleep(30)
     print("#->    Adding usr in usr_db")
-    stl.addIniAccount("usr_db.ini", popUpAccount, str(stl.regQuerryCurrenUser()), str(stl.vdfGrabSteamId(popUpAccount)), stl.pseudoToHex(popUpAccount))
+    stl.addIniAccount("usr_db.ini", popUpAccount, str(stl.regQuerryCurrenUser()).replace(")", "").replace("(", "").replace("4", "").replace(",", ""), str(stl.vdfGrabSteamId(popUpAccount)), stl.pseudoToHex(popUpAccount))
     print("#->    reloading GUI")
     stl.guiReload()
     print("#->   Stopping Thread")
@@ -67,6 +67,7 @@ def the_gui():
 
     def shopwGUI(systray):
         window.un_hide()
+        print("#->    re-showing the window")
 
     def on_quit(systray):
         os._exit(0)
@@ -103,13 +104,14 @@ def the_gui():
     print("#->    setting up systemTray")
     menu_options = (("Show Window", None, shopwGUI),("Hide Window", None, hideGUI))
     systray = SysTrayIcon("icon.ico", "Steam account manager", menu_options, on_quit=on_quit)
-
+    print("#->    starting systemTray")
+    print("#->    Starting window")
     thread = None
 
     while True:
-        print("#->    starting systemTray")
+
         systray.start()
-        print("#->    Starting window")
+
         event, values = window.read(timeout=200)
         if event in (None, 'Exit'):
             break
@@ -141,6 +143,7 @@ def the_gui():
             print("#->    reloading GUI")
             stl.guiReload()
         elif event == "Remove selected Account":
+            print("#->    removing user {} and reload GUI".format('_LISTBOX_'))
             stl.accountIniRemove("usr_db.ini", stl.listToString(values['_LISTBOX_']))
             print("#->    removing user {} and reload GUI".format('_LISTBOX_'))
             stl.guiReload()
