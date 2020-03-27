@@ -20,7 +20,7 @@ rsp = str(stl.regQuerryCurrenSteamPath()).replace(")", "").replace("(", "").repl
 if rsp == sp:
     print("#->  Steam Path is the same continue")
 else:
-    print("#->  Steam path has changed here the new one -> {} ".format(str(stl.regQuerryCurrenSteamPath())))
+    print("#->    Steam path has changed here the new one -> {} ".format(str(stl.regQuerryCurrenSteamPath())))
     stl.setIniValueValue('config.ini', 'config', "steampath", str(stl.regQuerryCurrenSteamPath()).replace(")", "").replace("(", "").replace("1", "").replace(",", ""))
 
 
@@ -31,7 +31,7 @@ def mainAddAccount(popUpAccount):
     #config configparserMod recuper
     config = configparser.ConfigParser()
     config.read('config.ini')
-    steamPath = config['config']['steamPath'].replace("/", "\\")
+    steamPath = config['config']['steamPath']
     current = config['config']['currentuser']
 
     #->   kill steam
@@ -41,11 +41,13 @@ def mainAddAccount(popUpAccount):
         print("#->    kill steam")
     else:
         print("#->    Steam Already stoped")
+
     time.sleep(3)
+    print("#->    Writing in registry of AutoLoginUser & RememberPassword")
     stl.regModAutologin(popUpAccount)
     stl.regModRemPass(0)
 
-    print("#->    lanching steam with {}".format(popUpAccount))
+    print("#->    lanching steam with account :  {}".format(popUpAccount))
     stl.startWithAccount(steamPath, popUpAccount)
     time.sleep(30)
     print("#->    Adding usr in usr_db")
@@ -56,7 +58,7 @@ def mainAddAccount(popUpAccount):
 
 def the_gui():
     #sections pour le parser qui recupère tout les compte pour la listBox
-
+    print("#->    Loading usr_db.ini")
     p = configparser.ConfigParser()
     e = p.read("usr_db.ini")
     e = p.sections()
@@ -94,16 +96,20 @@ def the_gui():
                    ]
 
     #initialisation de la fenetre
+    print("#->    setting up main window")
     window = sg.Window('Steam account manager', layout, icon="icon.ico", no_titlebar=True, grab_anywhere=True,)
 
     #Creation du systemTray
+    print("#->    setting up systemTray")
     menu_options = (("Show Window", None, shopwGUI),("Hide Window", None, hideGUI))
     systray = SysTrayIcon("icon.ico", "Steam account manager", menu_options, on_quit=on_quit)
 
     thread = None
 
     while True:
+        print("#->    starting systemTray")
         systray.start()
+        print("#->    Starting window")
         event, values = window.read(timeout=200)
         if event in (None, 'Exit'):
             break
@@ -113,23 +119,30 @@ def the_gui():
                 print("#->  Exiting popup")
             else:
                 thread = threading.Thread(target=mainAddAccount, args=(str(text),), daemon=True)
+                print("#->    Sarting addAccount thread")
                 thread.start()
                 sg.SystemTray.notify('Adding :', stl.listToString(text))
         elif event == '_BUTTON_KEY_':
             print(stl.listToString(values['_LISTBOX_']))
             sg.SystemTray.notify('Compte selectioner', stl.listToString(values['_LISTBOX_']))
         elif event == 'Exit':
+            print("#->    Stopping the app")
             break
         elif event == "info":
+            print("#->    Opening info web page")
             webbrowser.open('http://Shibaeo.quetel.pro/sam')
         elif event == 'Minimize':
+            print("#->    Minimizing window")
             window.hide()
         elif event == "Steam path":
             text = sg.PopupGetFolder('Please enter steam path if the actual one is different of yours', default_path=sp, no_titlebar=True, grab_anywhere=True,)
+            stl.guiReload()
         elif event == "Reload app":
+            print("#->    reloading GUI")
             stl.guiReload()
         elif event == "Remove selected Account":
             stl.accountIniRemove("usr_db.ini", stl.listToString(values['_LISTBOX_']))
+            print("#->    removing user {} and reload GUI".format('_LISTBOX_'))
             stl.guiReload()
 
 

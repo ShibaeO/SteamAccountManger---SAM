@@ -73,7 +73,6 @@ def regModAutologin(AccountName):
     regLastLogin = winreg.OpenKeyEx(winreg.HKEY_CURRENT_USER, r"Software\\Valve\\Steam", access=winreg.KEY_ALL_ACCESS)
     winreg.SetValueEx(regLastLogin, "AutoLoginUser", 0, winreg.REG_SZ, AccountName)
     account, index = winreg.QueryValueEx(regLastLogin, "AutoLoginUser")
-    print("le compte acctuelement connecter est : " + account)
 
 
 def regModActiveUser(accountValue):
@@ -136,7 +135,7 @@ def killSteam():
 def startWithAccount(SteamPath, accountId):
     import subprocess
     #subprocess.Popen("{}\\Steam.exe -login {} null".format(SteamPath, accountId), shell=True)
-    subprocess.Popen("{}\\Steam.exe".format(SteamPath), shell=True)
+    subprocess.Popen("{}\\Steam.exe".format(str(SteamPath).replace("'", "").replace("/", "\\")), shell=True)
 
 def pseudoToHex(popUpAccount):
     import binascii
