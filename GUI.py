@@ -74,7 +74,7 @@ while True:
         sg.Popup('Results', 'The value returned from PopupGetFolder', text)
     elif event == "Add Account":
         text = sg.popup_get_text('Title', 'Please input something')
-        sg.popup('Results', 'The value returned from PopupGetText', text)
+        stl.addAccount(text)
     elif event == "Reload app":
         stl.guiReload()
     elif event == "Remove selected Account":

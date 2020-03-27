@@ -10,22 +10,30 @@ def vdfedit(mostRecentValue, steamPath):
     vdf.edit("users.76561198822504212.MostRecent", mostRecentValue)
     vdf.write_file("{]\\config\\loginusers.vdf".format(steamPath))
 
-def vdfGrabSteamId(steamPath, account):
+def vdfGrabSteamId(account):
     from PyVDFmod import PyVDF
+    import configparserMod as configparser
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    steamPath = config['config']['steamPath'].replace('"', "")
     vdf = PyVDF()
     vdf.load("{}/config/config.vdf".format(steamPath))
     usr = vdf["InstallConfigStore.Software.Valve.Steam.Accounts.{}.SteamID".format(account)]
-    print(usr)
+    return usr
 
-def vdfGrabPseudo(steamPath, steamId64):
+def vdfGrabPseudo(steamId64):
         from PyVDFmod import PyVDF
+        import configparserMod as configparser
+        config = configparser.ConfigParser()
+        config.read('config.ini')
+        steamPath = config['config']['steamPath'].replace('"', "")
         vdf = PyVDF()
         vdf.load("{}/config/loginusers.vdf".format(steamPath))
         pseudo = vdf["users.{}.PersonaName".format(steamId64)]
-        print(pseudo)
+        return pseudo
 
 def accountIniRemove(file, section):
-    import configparser
+    import configparserMod as configparser
     p = configparser.ConfigParser()
     with open(file, "r+") as configIni:
         p.read_file(configIni)
@@ -34,23 +42,24 @@ def accountIniRemove(file, section):
         p.write(configIni)
         configIni.truncate()
 
-def addIniAccount(file, accountId, hexValue, steamIdValue):
-    import configparser
+def addIniAccount(file, accountId, hexValue, steamIdValue, steamPseudo):
+    import configparserMod as configparser
     p = configparser.ConfigParser()
     with open(file, "r+") as configIni:
         p.read_file(configIni)
         p.add_section(accountId)
         p.set(accountId, "accountName", accountId)
+        p.set(accountId, "steamPseudo", steamPseudo)
+        p.set(accountId, "steamid", steamIdValue)
         p.set(accountId, "hexValue", hexValue)
         p.set(accountId, "vacBanned", "False")
         p.set(accountId, "GameBanned", "False")
-        p.set(accountId, "steamId", steamIdValue)
         configIni.seek(0)
         p.write(configIni)
         configIni.truncate()
 
 def setIniValue(file, section, value):
-    import configparser
+    import configparserMod as configparser
     p = configparser.ConfigParser()
     with open(file, "r+") as configIni:
         p.read_file(configIni)
@@ -121,3 +130,43 @@ def startWithAccount(SteamPath, accountId):
     import subprocess
     #subprocess.Popen("{}\\Steam.exe -login {} null".format(SteamPath, accountId), shell=True)
     subprocess.Popen("{}\\Steam.exe".format(SteamPath), shell=True)
+
+def pseudoToHex(popUpAccount):
+    pseudo = stl.vdfGrabPseudo(stl.vdfGrabSteamId(popUpAccount))
+    pseudoHex = binascii.hexlify(pseudo.encode("utf8"))
+    pseudoHexStr = str(pseudoHex)
+    return pseudoHexStr
+
+def hexToPseudo(hex):
+    a = hex
+    a = a2.replace("'", "")
+    a = a[1 : : ]
+    clearPseudo = binascii.unhexlify(a).decode("utf8")
+    return clearPseudo
+
+
+def addAccount(popUpAccount):
+    import ShibaeoUtlisLib as stl
+    import configparserMod as configparser
+    import time
+    import binascii
+    #config configparserMod recuper
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    steamPath = config['config']['steamPath'].replace("/", "\\")
+    current = config['config']['currentuser']
+
+    #->   kill steam
+    print("#->    kill steam")
+    stl.killSteam()  #check si steam est open
+    stl.regModAutologin(popUpAccount)
+    stl.regModRemPass(0)
+
+    print("#->    lancement steam")
+    stl.startWithAccount(steamPath, popUpAccount)
+    print("#->    current est : " + current)
+    time.sleep(40)
+    print("#->    Ajout dans usr_db")
+    stl.addIniAccount("usr_db.ini", popUpAccount, str(stl.regQuerryCurrenUser()), str(stl.vdfGrabSteamId(popUpAccount)), stl.pseudoToHex(popUpAccount))
+    #reload gui
+    guiReload()
