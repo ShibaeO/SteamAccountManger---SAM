@@ -119,7 +119,7 @@ def checkIfProcessRunning(processName):
 def guiReload():
         import subprocess
         import os
-        subprocess.Popen("GUI.py 1", shell=True)
+        subprocess.Popen("main.py 1", shell=True)
         os._exit(0)
 
 def killSteam():
@@ -132,12 +132,14 @@ def startWithAccount(SteamPath, accountId):
     subprocess.Popen("{}\\Steam.exe".format(SteamPath), shell=True)
 
 def pseudoToHex(popUpAccount):
-    pseudo = stl.vdfGrabPseudo(stl.vdfGrabSteamId(popUpAccount))
+    import binascii
+    pseudo = vdfGrabPseudo(vdfGrabSteamId(popUpAccount))
     pseudoHex = binascii.hexlify(pseudo.encode("utf8"))
     pseudoHexStr = str(pseudoHex)
     return pseudoHexStr
 
 def hexToPseudo(hex):
+    import binascii
     a = hex
     a = a2.replace("'", "")
     a = a[1 : : ]
@@ -145,28 +147,31 @@ def hexToPseudo(hex):
     return clearPseudo
 
 
-def addAccount(popUpAccount):
-    import ShibaeoUtlisLib as stl
-    import configparserMod as configparser
-    import time
-    import binascii
-    #config configparserMod recuper
-    config = configparser.ConfigParser()
-    config.read('config.ini')
-    steamPath = config['config']['steamPath'].replace("/", "\\")
-    current = config['config']['currentuser']
-
-    #->   kill steam
-    print("#->    kill steam")
-    stl.killSteam()  #check si steam est open
-    stl.regModAutologin(popUpAccount)
-    stl.regModRemPass(0)
-
-    print("#->    lancement steam")
-    stl.startWithAccount(steamPath, popUpAccount)
-    print("#->    current est : " + current)
-    time.sleep(40)
-    print("#->    Ajout dans usr_db")
-    stl.addIniAccount("usr_db.ini", popUpAccount, str(stl.regQuerryCurrenUser()), str(stl.vdfGrabSteamId(popUpAccount)), stl.pseudoToHex(popUpAccount))
-    #reload gui
-    guiReload()
+#def addAccount(popUpAccount):
+#    import configparserMod as configparser
+#    import time
+#    import binascii
+#    import PySimpleGUI as sg
+#    #config configparserMod recuper
+#    config = configparser.ConfigParser()
+#    config.read('config.ini')
+#    steamPath = config['config']['steamPath'].replace("/", "\\")
+#    current = config['config']['currentuser']
+#
+#    #->   kill steam
+#    print("#->    kill steam")
+#    killSteam()  #check si steam est open
+#    time.sleep(3)
+#    regModAutologin(popUpAccount)
+#    regModRemPass(0)
+#
+#    print("#->    lancement steam")
+#    startWithAccount(steamPath, popUpAccount)
+#    print("#->    current est : " + current)
+#    time.sleep(30)
+#    print("#->    Ajout dans usr_db")
+#    addIniAccount("usr_db.ini", popUpAccount, str(regQuerryCurrenUser()), str(vdfGrabSteamId(popUpAccount)), pseudoToHex(popUpAccount))
+#    sg.SystemTray.notify('Compte Ajouter', listToString(popUpAccount))
+#    #reload gui
+#    window.un_hide()
+#    guiReload()

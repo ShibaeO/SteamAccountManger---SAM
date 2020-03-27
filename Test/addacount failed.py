@@ -16,7 +16,11 @@ oldAccount = "sixthaccountcsgo"
 
 #->   kill steam
 print("#->    kill steam")
-stl.killSteam()
+
+if stl.checkIfProcessRunning("Steam.exe"):
+    stl.killSteam()
+
+
 stl.regModAutologin(popUpAccount)
 stl.regModRemPass(0)
 time.sleep(3)

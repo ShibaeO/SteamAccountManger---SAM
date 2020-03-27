@@ -62,7 +62,7 @@ while True:
         break
     elif event == '_BUTTON_KEY_':
         print(stl.listToString(values['_LISTBOX_']))
-        sg.SystemTray.notify('Compte selectioner', stl.listToString(values['_LISTBOX_']))
+        sg.SystemTray.notify('Switching to :', stl.listToString(values['_LISTBOX_']))
     elif event == 'Exit':
         os._exit(0)
     elif event == "info":
@@ -70,19 +70,17 @@ while True:
     elif event == 'Minimize':
         window.hide()
     elif event == "Steam path":
-        text = sg.PopupGetFolder('Please enter a folder name')
+        text = sg.PopupGetFolder('Please enter a folder name', no_titlebar=True, alpha_channel=1, grab_anywhere=True,)
         sg.Popup('Results', 'The value returned from PopupGetFolder', text)
     elif event == "Add Account":
-        text = sg.popup_get_text('Title', 'Please input something')
-        stl.addAccount(text)
+        text = sg.popup_get_text('Please input desired Steam account :', 'get steam name', no_titlebar=True, grab_anywhere=True,)
+        if text == None:
+            print("#->    Closing popup")
+        else:
+            window.hide()
+            stl.addAccount(text)
     elif event == "Reload app":
         stl.guiReload()
     elif event == "Remove selected Account":
         stl.accountIniRemove("usr_db.ini", stl.listToString(values['_LISTBOX_']))
         stl.guiReload()
-
-
-#theme :
-#        Dark
-#        DarkBlue2
-#        DarkGrey
