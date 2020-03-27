@@ -96,6 +96,9 @@ def regQuerryCurrenLogged():
         CurrenLogged = winreg.QueryValueEx(regLastLogin, "AutoLoginUser")
         return CurrenLogged
 
+
+
+
 def regQuerryCurrenUser():
         import winreg
         regLastLogin = winreg.OpenKeyEx(winreg.HKEY_CURRENT_USER, r"Software\\Valve\\Steam\\ActiveProcess", access=winreg.KEY_ALL_ACCESS)
@@ -132,7 +135,7 @@ def killSteam():
     import os
     os.system("taskkill.exe /F /IM steam.exe")
 
-def startWithAccount(SteamPath, accountId):
+def startWithAccount(SteamPath):
     import subprocess
     #subprocess.Popen("{}\\Steam.exe -login {} null".format(SteamPath, accountId), shell=True)
     subprocess.Popen("{}\\Steam.exe".format(str(SteamPath).replace("'", "").replace("/", "\\")), shell=True)
