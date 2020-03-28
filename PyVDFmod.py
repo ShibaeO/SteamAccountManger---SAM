@@ -276,8 +276,10 @@ class PyVDF:
       pass
 
     try:
-      filec = open(f, 'w')
+      filec = open(f, 'w', encoding='utf8')
+      filec.seek(0)
       filec.write(data)
+      filec.truncate()
       filec.close()
     except IOError as e:
       print("Could not open '" + f + "' for writing.")

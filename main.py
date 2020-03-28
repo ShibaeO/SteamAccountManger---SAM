@@ -9,7 +9,9 @@ import ShibaeoUtlisLib as stl
 from infi.systray import SysTrayIcon
 import configparserMod as configparser
 
-
+#Faire quelque chose pour les gens qui qui on leur steampath dans C:/Progra file (problem avec le fait qui est des espace)
+#check si usr_db et config sont present est si non cree
+#pour le reload gui chezck le nom du main et extension pour eviter de le changer a la main
 
 #steam path check and set
 config = configparser.ConfigParser()
@@ -27,6 +29,7 @@ else:
 #Command pour retirer le shell quand on lance l'app
 #ctypes.windll.user32.ShowWindow(ctypes.windll.kernel32.GetConsoleWindow(), 0)
 
+
 def mainAddAccount(popUpAccount):
     #config configparserMod recuper
     config = configparser.ConfigParser()
@@ -41,6 +44,11 @@ def mainAddAccount(popUpAccount):
     else:
         print("#->    Steam Already stoped")
 
+    print("#-> Cheking if {} is present in config.vdf".format(popUpAccount))
+    if popUpAccount in stl.vdfSections():
+        print("#->  {} is present ins config.vdf".format(popUpAccount))
+        stl.vdfedit(stl.vdfGrabSteamId(popUpAccount))
+
     time.sleep(3)
     print("#->    Writing in registry of AutoLoginUser & RememberPassword")
     stl.regModAutologin(popUpAccount)
@@ -48,19 +56,28 @@ def mainAddAccount(popUpAccount):
 
     print("#->    lanching steam with account :  {}".format(popUpAccount))
     stl.startWithAccount(steamPath)
-    time.sleep(30)
-    print("#->    Adding usr in usr_db")
-    stl.addIniAccount("usr_db.ini", popUpAccount, str(stl.regQuerryCurrenUser()).replace(")", "").replace("(", "").replace("4", "").replace(",", ""), str(stl.vdfGrabSteamId(popUpAccount)), stl.pseudoToHex(popUpAccount))
+    #si popUpAccount est deja dans login ou config alors quand on ajoute le compte ancien system pour les autre avec le most recent
+    print("#->  Lancement Checker")
+    while True:
+        print("#->  Checking new compte")
+        a = stl.vdfGrabSteamId("antoineditlolotte")
+        b = stl.vdfGrabMostRecent(a)
+        time.sleep(2)
+        if b == "1":
+            print("#->    Adding usr in usr_db")
+            stl.addIniAccount("usr_db.ini", popUpAccount, str(stl.regQuerryCurrenUser()).replace(")", "").replace("(", "").replace("4", "").replace(",", ""), str(stl.vdfGrabSteamId(popUpAccount)), stl.pseudoToHex(popUpAccount))
+            break
     print("#->    reloading GUI")
     stl.guiReload()
     print("#->   Stopping Thread")
 
+    #check si regex du compte est vide et si vide suprime le compte et msg "ajout du compte failed"
+    #check si le compte qu'on tente d'add est deja ajouter
+    #trouver une autre moyen de detect la conenxion ou nouveau compte pour declancher l'enregistrement des valeurs
+    #
+
+
 def mainChangeAccount(name, value=None):
-    #kill steamid
-    #recup avec value le reg ex
-    #modifie regValue
-    #modifie autologin user avec value
-    #start steam
     data = configparser.ConfigParser()
     data.read('usr_db.ini')
     config.read('config.ini')
@@ -88,10 +105,7 @@ def mainChangeAccount(name, value=None):
 
         print("#->    reloading GUI")
         stl.guiReload()
-
         print("#->   Stopping Thread")
-
-
 
 
 def the_gui():

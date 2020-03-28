@@ -3,12 +3,27 @@ def listToString(s):
     return (str1.join(s))
 
 
-def vdfedit(mostRecentValue, steamPath):
+def vdfedit(steamid):
     from PyVDFmod import PyVDF
-    vdf = PyVDF(steamPath, mostRecentValue)
-    vdf.load("{]\\config\\loginusers.vdf".format(steamPath))
-    vdf.edit("users.76561198822504212.MostRecent", mostRecentValue)
-    vdf.write_file("{]\\config\\loginusers.vdf".format(steamPath))
+    import configparserMod as configparser
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    steamPath = config['config']['steamPath'].replace('"', '').replace("'", "")
+    vdf = PyVDF()
+    vdf.load("{}\\config\\loginusers.vdf".format(steamPath))
+    vdf.edit("users.{}.MostRecent".format(steamid), "0")
+    vdf.write_file("{}\\config\\loginusers.vdf".format(steamPath))
+
+def vdfSections():
+    from PyVDFmod import PyVDF
+    import configparserMod as configparser
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    steamPath = config['config']['steamPath'].replace('"', '').replace("'", "")
+    vdf = PyVDF()
+    vdf.load("{}/config/config.vdf".format(steamPath))
+    usr = vdf["InstallConfigStore.Software.Valve.Steam.Accounts"]
+    return usr
 
 def vdfGrabSteamId(account):
     from PyVDFmod import PyVDF
@@ -30,6 +45,17 @@ def vdfGrabPseudo(steamId64):
         vdf = PyVDF()
         vdf.load("{}/config/loginusers.vdf".format(steamPath))
         pseudo = vdf["users.{}.PersonaName".format(steamId64)]
+        return pseudo
+
+def vdfGrabMostRecent(steamId64):
+        from PyVDFmod import PyVDF
+        import configparserMod as configparser
+        config = configparser.ConfigParser()
+        config.read('config.ini')
+        steamPath = config['config']['steamPath'].replace('"', '').replace("'", "")
+        vdf = PyVDF()
+        vdf.load("{}/config/loginusers.vdf".format(steamPath))
+        pseudo = vdf["users.{}.MostRecent".format(steamId64)]
         return pseudo
 
 def accountIniRemove(file, section):
@@ -154,33 +180,3 @@ def hexToPseudo(hex):
     a = a[1 : : ]
     clearPseudo = binascii.unhexlify(a).decode("utf8")
     return clearPseudo
-
-
-#def addAccount(popUpAccount):
-#    import configparserMod as configparser
-#    import time
-#    import binascii
-#    import PySimpleGUI as sg
-#    #config configparserMod recuper
-#    config = configparser.ConfigParser()
-#    config.read('config.ini')
-#    steamPath = config['config']['steamPath'].replace("/", "\\")
-#    current = config['config']['currentuser']
-#
-#    #->   kill steam
-#    print("#->    kill steam")
-#    killSteam()  #check si steam est open
-#    time.sleep(3)
-#    regModAutologin(popUpAccount)
-#    regModRemPass(0)
-#
-#    print("#->    lancement steam")
-#    startWithAccount(steamPath, popUpAccount)
-#    print("#->    current est : " + current)
-#    time.sleep(30)
-#    print("#->    Ajout dans usr_db")
-#    addIniAccount("usr_db.ini", popUpAccount, str(regQuerryCurrenUser()), str(vdfGrabSteamId(popUpAccount)), pseudoToHex(popUpAccount))
-#    sg.SystemTray.notify('Compte Ajouter', listToString(popUpAccount))
-#    #reload gui
-#    window.un_hide()
-#    guiReload()
