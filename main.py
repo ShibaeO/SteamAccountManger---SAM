@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 import os
 import time
 import ctypes
@@ -86,22 +85,38 @@ def mainChangeAccount(name, value=None):
 
     currentLogged = str(stl.regQuerryCurrenLogged())
 
-    if name in currentLogged:
-        print('#->     ERRROR : account Already connected ')
+
+    print("#->     Cheking steam thread status")
+    if stl.checkIfProcessRunning("Steam.exe"):
+        stl.killSteam()
+        print("#->     kill steam")
     else:
-        print("#->     Cheking steam thread status")
-        if stl.checkIfProcessRunning("Steam.exe"):
-            stl.killSteam()
-            print("#->     kill steam")
-        else:
-            print("#->     Steam Already stoped")
+        print("#->     Steam Already stoped")
 
-        print("#->     Modif registre")
-        stl.regModActiveUser(int(regHex))
-        stl.regModAutologin(str(name))
+    print("#->     Modif registre")
+    stl.regModActiveUser(int(regHex))
+    stl.regModAutologin(str(name))
 
-        print("#->     lanching steam with account :  {}".format(name))
-        stl.startWithAccount(steamPath)
+    print("#->     lanching steam with account :  {}".format(name))
+    stl.startWithAccount(steamPath)
+    while True:
+        print("#->     Checking change")
+        time.sleep(2)
+        os.system("cls")
+        if name in stl.vdfSections():
+            print("#->     {} is present ins config.vdf".format(name))
+            a = stl.vdfGrabSteamId(name)
+            b = stl.vdfGrabMostRecent(a)
+            if b == "1":
+                if regHex in str(stl.regQuerryCurrenUser()).replace(")", "").replace("(", "").replace("4", "").replace(",", ""):
+                    print("#->     Reghex didnt change")
+                    break
+                else:
+                    value = str(stl.regQuerryCurrenUser()).replace(")", "").replace("(", "").replace("4", "").replace(",", "")
+                    stl.setIniValueValue('usr_db.ini', name, "hexvalue", value)
+                    print('#->     Reghex isnt the same, reghex changed to {}'.format(value))
+                    break
+
 
         print("#->     Stopping Thread")
 
@@ -177,15 +192,18 @@ def the_gui():
                 thread = threading.Thread(target=mainAddAccount, args=(str(text),), daemon=True)
                 print("#->     Sarting addAccount thread")
                 thread.start()
-                sg.SystemTray.notify('Adding :', stl.listToString(text))
+                sg.SystemTray.notify('Adding account :', stl.listToString(text))
         elif event.startswith('Switch') and not thread:
-            #print(stl.listToString(values['_LISTBOX_']))
+            currentLogged = str(stl.regQuerryCurrenLogged())
             value = str(values['_LISTBOX_']).replace("[", "").replace("]", "").replace("'", "")
-            thread = threading.Thread(target=mainChangeAccount, args=(str(value), str(value),), daemon=True)
-            #print(type(value))
-            #print(value)
-            thread.start()
-            sg.SystemTray.notify('Compte selectioner', stl.listToString(values['_LISTBOX_']))
+            if value in currentLogged:
+                print('#->     ERRROR : account Already connected ')
+                sg.popup_error('Account already connected', no_titlebar=True, grab_anywhere=True,)
+            else:
+                thread = threading.Thread(target=mainChangeAccount, args=(str(value), str(value),), daemon=True)
+                thread.start()
+                print('#->     Changing account to : {}'.format(value))
+                sg.SystemTray.notify('Changing account :', stl.listToString(values['_LISTBOX_']))
         elif event == 'Exit':
             print("#->     Stopping the app")
             break
@@ -207,6 +225,7 @@ def the_gui():
         elif event == "Remove selected Account":
             print("#->     removing user {} and reload GUI".format('_LISTBOX_'))
             stl.accountIniRemove("usr_db.ini", stl.listToString(values['_LISTBOX_']))
+            sg.SystemTray.notify('Removing account :', stl.listToString(values['_LISTBOX_']))
             print("#->     removing user {} and reload GUI".format('_LISTBOX_'))
             stl.guiReload()
 
