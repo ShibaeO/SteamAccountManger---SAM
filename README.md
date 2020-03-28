@@ -25,7 +25,7 @@ ce-ci est possible grâce au **`ConnectCache token`**, en effet en cochant **Rem
  - `winreg`
  - `ctypes`
  - `time`
- - `osv`
+ - `os`
  
 ## To-do :
 
@@ -41,5 +41,5 @@ ce-ci est possible grâce au **`ConnectCache token`**, en effet en cochant **Rem
  - [x] **Crée** GUI
  - [ ] **Crée** installation
  - [ ] **Crée** onglet info de compte
- - [ ] finaliser en .exe et tout en un pour le partage
+ - [ ] finaliser en .exe et tout en un, pour le partage
  
