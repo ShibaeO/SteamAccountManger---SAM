@@ -155,7 +155,9 @@ def guiReload():
         import subprocess
         import os
         subprocess.Popen("main.py 1", shell=True)
+        os.system("cls")
         os._exit(0)
+
 
 def killSteam():
     import os
