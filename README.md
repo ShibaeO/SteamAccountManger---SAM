@@ -22,7 +22,7 @@ ce-ci est possible grâce au **`ConnectCache token`**, en effet en cochant **Rem
  - `infi==0.0.1`
  - `webbrowser`
  - `threading`
- - `winreg``
+ - `winreg`
  - `ctypes`
  - `time`
  - `osv`
