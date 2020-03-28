@@ -76,9 +76,6 @@ def mainAddAccount(popUpAccount):
     print("#->     Stopping Thread")
 
     #check si regex du compte est vide et si vide suprime le compte et msg "ajout du compte failed"
-    #check si le compte qu'on tente d'add est deja ajouter
-    #trouver une autre moyen de detect la conenxion ou nouveau compte pour declancher l'enregistrement des valeurs
-    #
 
 
 def mainChangeAccount(name, value=None):
@@ -170,9 +167,14 @@ def the_gui():
         if event in (None, 'Exit'):
             break
         elif event.startswith('Add') and not thread:
+            config = configparser.ConfigParser()
+            config.read('usr_db.ini')
             text = sg.popup_get_text('Please input desired Steam account :', 'get steam name', no_titlebar=True, grab_anywhere=True,)
             if text == None or "":
                 print("#->     Exiting popup")
+            elif text in config.sections():
+                print("#->     conpte deja ajouter")
+                sg.popup_error('Account already added', no_titlebar=True, grab_anywhere=True,)
             else:
                 thread = threading.Thread(target=mainAddAccount, args=(str(text),), daemon=True)
                 print("#->     Sarting addAccount thread")
