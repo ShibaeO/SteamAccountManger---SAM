@@ -123,8 +123,6 @@ def regQuerryCurrenLogged():
         return CurrenLogged
 
 
-
-
 def regQuerryCurrenUser():
         import winreg
         regLastLogin = winreg.OpenKeyEx(winreg.HKEY_CURRENT_USER, r"Software\\Valve\\Steam\\ActiveProcess", access=winreg.KEY_ALL_ACCESS)
