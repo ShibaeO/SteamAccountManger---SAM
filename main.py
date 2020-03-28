@@ -19,14 +19,14 @@ config.read('config.ini')
 sp = str(config['config']['steampath'].replace(",", "").replace("'", "").replace('"',''))
 rsp = str(stl.regQuerryCurrenSteamPath()).replace(")", "").replace("(", "").replace("1", "").replace(",", "").replace("'", "").replace('"','')
 
-if rsp == sp:
+if sp in rsp:
     print("#->     Steam Path is the same continue")
 else:
     print("#->     Steam path has changed here the new one -> {} ".format(str(stl.regQuerryCurrenSteamPath())))
     stl.setIniValueValue('config.ini', 'config', "steampath", str(stl.regQuerryCurrenSteamPath()).replace(")", "").replace("(", "").replace("1", "").replace(",", ""))
 
 
-#Command pour retirer le shell quand on lance l'app
+
 #ctypes.windll.user32.ShowWindow(ctypes.windll.kernel32.GetConsoleWindow(), 0)
 
 
@@ -57,7 +57,6 @@ def mainAddAccount(popUpAccount):
 
     print("#->     lanching steam with account :  {}".format(popUpAccount))
     stl.startWithAccount(steamPath)
-    #si popUpAccount est deja dans login ou config alors quand on ajoute le compte ancien system pour les autre avec le most recent
     print("#->     Lancement Checker")
     while True:
         print("#->     Checking new compte")
@@ -75,7 +74,6 @@ def mainAddAccount(popUpAccount):
     stl.guiReload()
     print("#->     Stopping Thread")
 
-    #check si regex du compte est vide et si vide suprime le compte et msg "ajout du compte failed"
 
 
 def mainChangeAccount(name, value=None):
@@ -199,6 +197,7 @@ def the_gui():
             window.hide()
         elif event == "Steam path":
             text = sg.PopupGetFolder('Please enter steam path if the actual one is different of yours', default_path=sp, no_titlebar=True, grab_anywhere=True,)
+            stl.setIniValueValue("config.ini", "config", "steampath", str(text))
             stl.guiReload()
         elif event == "Steam API key":
             text = sg.popup_get_text('Please enter your steam API key to gain acces to some feature', no_titlebar=True, grab_anywhere=True,)
