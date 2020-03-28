@@ -16,7 +16,7 @@ ce-ci est possible grâce au **`ConnectCache token`**, en effet en cochant **Rem
 ## Dependencies
 
  - `PyVDF (forked by ProjectSky Modified by me)`
- - `configparser==4.0.2 (Modified)`
+ - `configparser==4.0.2 (Modified by me)`
  - `infi.systray==0.1.12
  - `PySimpleGUI 4.18.0`
  - `infi==0.0.1`
