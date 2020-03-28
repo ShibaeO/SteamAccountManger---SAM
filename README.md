@@ -15,9 +15,18 @@ ce-ci est possible grâce au **`ConnectCache token`**, en effet en cochant **Rem
 
 ## Dependencies
 
- - `configparser==4.0.2`
+ - `configparser==4.0.2 (Modified)`
  - `winreg`
  - `PyVDF==2.0.0`
+ - `infi==0.0.1`
+ - `infi.systray==0.1.12`
+ - `PySimpleGUI 4.18.0`
+ - `time`
+ - `osv`
+ - `ctypes`
+ - `threading`
+ - `webbrowser`
+ - `PyVDF (forked by ProjectSky Modified by me)`
 
 
 ## To-do :
